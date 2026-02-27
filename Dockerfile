@@ -1,10 +1,10 @@
-FROM php:7.4-apache
 
-# Install required PHP extensions
+FROM php:7.2-apache
+
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copy all app files
 COPY . /var/www/html/
 
-# Expose HTTP port
+RUN a2enmod rewrite
+
 EXPOSE 80
