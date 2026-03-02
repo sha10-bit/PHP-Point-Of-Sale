@@ -1,9 +1,9 @@
 cd /PHP-Point-Of-Sale
 
-# Copy the new simple Jenkinsfile
+
 cp /mnt/user-data/outputs/Jenkinsfile-SIMPLE Jenkinsfile
 
-# Or create it manually
+
 cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
