@@ -21,11 +21,25 @@ pipeline {
             steps {
                 echo "Creating database.php file"
                 sh '''
-                    cp application/config/database.php.tmpl application/config/database.php
-                    sed -i "s/'localhost'/'${DB_HOST}'/" application/config/database.php
-                    sed -i "s/'root'/'${DB_USER}'/" application/config/database.php
-                    sed -i "s/'password'/'${DB_PASS}'/" application/config/database.php
-                    sed -i "s/'database'/'${DB_NAME}'/" application/config/database.php
+                    cat > application/config/database.php << 'DBCONFIG'
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+$active_group = "default";
+$active_record = TRUE;
+
+$db['default']['hostname'] = "localhost";
+$db['default']['username'] = "pos_user";
+$db['default']['password'] = "pos123456";
+$db['default']['database'] = "pos_app";
+$db['default']['dbdriver'] = "mysql";
+$db['default']['dbprefix'] = "phppos_";
+$db['default']['pconnect'] = FALSE;
+$db['default']['db_debug'] = FALSE;
+$db['default']['cache_on'] = FALSE;
+$db['default']['cachedir'] = "";
+$db['default']['char_set'] = "utf8";
+$db['default']['dbcollat'] = "utf8_general_ci";
+DBCONFIG
                 '''
             }
         }
@@ -47,7 +61,7 @@ pipeline {
 
     post {
         success {
-            echo "BUILD SUCCESSFUL - Access: http://localhost/pos"
+            echo "BUILD SUCCESSFUL"
         }
         failure {
             echo "BUILD FAILED"
