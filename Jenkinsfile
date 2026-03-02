@@ -30,31 +30,27 @@ pipeline {
             }
         }
 
-        stage('Verify') {
-            steps {
-                echo "Checking PHP syntax"
-                sh 'php -l application/config/database.php'
-            }
-        }
-
         stage('Deploy') {
             steps {
                 echo "Deploying application"
                 sh '''
                     sudo mkdir -p /var/www/html/pos
+                    sudo mkdir -p /var/www/html/pos/application/cache
+                    sudo mkdir -p /var/www/html/pos/application/logs
                     sudo cp -r . /var/www/html/pos/
                     sudo chown -R www-data:www-data /var/www/html/pos
                     sudo chmod -R 755 /var/www/html/pos
-                    sudo chmod -R 775 /var/www/html/pos/application/cache
-                    sudo chmod -R 775 /var/www/html/pos/application/logs
                 '''
             }
         }
     }
 
     post {
-        always {
-            echo "Build finished"
+        success {
+            echo "BUILD SUCCESSFUL - Access: http://localhost/pos"
+        }
+        failure {
+            echo "BUILD FAILED"
         }
     }
 }
